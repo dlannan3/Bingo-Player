@@ -13,7 +13,12 @@ lists = {
 }
 
 def main(): #Main function of the program that asks for the number called and identifies the column based on the number range
-    global B
+    global B, I, N, G, O
+    B.clear()
+    I.clear()
+    N.clear()
+    G.clear()
+    O.clear()
     defineCards()
     card = input("What number was called?\n")
     while(card != "quit" and card != "new"): #Loops the function until the user enters "quit" or "new"
@@ -29,10 +34,11 @@ def main(): #Main function of the program that asks for the number called and id
         else:
             print(scanO(str(card)))
         bingoV()
+        bingoD()
         card = input("What number was called?\n")
     if(card == "new"): #Restarts the program
-        main()
 
+        main()
 
 def defineCards(): #Defines each list for the cards and their columns
     global B,I,N,G,O
@@ -49,7 +55,6 @@ def defineCards(): #Defines each list for the cards and their columns
         print(f"Please enter the O values for card {i + 1}")
         O.append([input() for _ in range(5)]) #Appends a list as a value in the list O
         N[i].insert(2,"x") #Creates the free space on each card before moving to the next
-
 
 def scanB(call): #Each functions checks if the number entered is on any of the cards by checking the column identified in main()
     global B
@@ -102,25 +107,38 @@ def scanO(call):
             cards.append(f"Card {i+1} Column O") #Appends to the local list "cards" with an identifier for the user to know what cards have that number in column O
     return cards
 
-def bingoV():
-    for char in "BINGO": 
-        charL = lists[char]
-        bingo = True
-        for i in range(len(charL)):
-            if "x" in charL[i]:
-                for y in range(len(charL[i])):
-                    if charL[i][y] != "x":
+def bingoV(): #Check for a bingo in each column
+    for char in "BINGO": #Cycles through each column
+        charL = lists[char] #Converts letters as a string to the list names
+        bingo = True #Starts bingo as true until proven false
+        for i in range(len(charL)): #Loops through each card
+            if "x" in charL[i]: #Checks if there are an x's at all and breaks if none have been dabbed
+                for y in range(len(charL[i])): #Loops through each index of the column
+                    if charL[i][y] != "x": #Checks if any numbers in the column aren't dabbed
                         bingo = False
             else:
-                bingo = False
+                bingo = False #Sets bingo to false if there are no numbers dabbed
             if bingo:
-                print("BINGO")
-                print("B  I  N  G  O")
-                print(f"{B[i][0]}{I[i][0]}{N[i][0]}{G[i][0]}{O[i][0]}")
-                print(f"{B[i][1]}{I[i][1]}{N[i][1]}{G[i][1]}{O[i][1]}")
-                print(f"{B[i][2]}{I[i][2]}{N[i][2]}{G[i][2]}{O[i][2]}")
-                print(f"{B[i][3]}{I[i][3]}{N[i][3]}{G[i][3]}{O[i][3]}")
-                print(f"{B[i][4]}{I[i][4]}{N[i][4]}{G[i][4]}{O[i][4]}")
+                callBingo(i) #Calls bingo if never proven wrong
+
+
+def bingoD(): #Checks for a bingo on the diagonals
+    for i in range(len(B)): #Loops through each card
+        if (B[i][0] == "x" and I[i][1] =="x" and G[i][3] == "x" and O[i][4] == "x"): #Checks for diagonal from top left to bottom right
+            callBingo(i)
+        elif(B[i][4] == "x" and I[i][3] =="x" and G[i][1] == "x" and O[i][0] == "x"): #Check for diagonal from bottom left to top right
+            callBingo(i)
+
+
+def callBingo(i): #Prints the card number and layout for the user to dab them
+    print(f"BINGO on card {i+1}\n") #Displays the card number and creates a blank line below
+    print(" B  I  N  G  O") #Identifies the rows
+    #Prints the numbers and dabs for the card with bingo
+    print(f"{B[i][0]} {I[i][0]} {N[i][0]} {G[i][0]} {O[i][0]}")
+    print(f"{B[i][1]} {I[i][1]} {N[i][1]} {G[i][1]} {O[i][1]}")
+    print(f"{B[i][2]} {I[i][2]} {N[i][2]} {G[i][2]} {O[i][2]}")
+    print(f"{B[i][3]} {I[i][3]} {N[i][3]} {G[i][3]} {O[i][3]}")
+    print(f"{B[i][4]} {I[i][4]} {N[i][4]} {G[i][4]} {O[i][4]}\n") #Creates a blank space below the card
 
 
 main() #Starts the program
