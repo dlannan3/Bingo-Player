@@ -4,6 +4,13 @@ I = []
 N = []
 G = []
 O = []
+lists = {
+    "B" : B,
+    "I" : I,
+    "N" : N,
+    "G" : G,
+    "O" : O
+}
 
 def main(): #Main function of the program that asks for the number called and identifies the column based on the number range
     global B
@@ -52,7 +59,6 @@ def scanB(call): #Each functions checks if the number entered is on any of the c
             for y in range(len(B[i])):
                 if (call == B[i][y]):
                     B[i][y] = "x"
-                    print(B[i])
             cards.append(f"Card {i+1} Column B") #Appends to the local list "cards" with an identifier for the user to know what cards have that number in column B
     return cards
 def scanI(call):
@@ -97,19 +103,24 @@ def scanO(call):
     return cards
 
 def bingoV():
-    for char in "BINGO":
+    for char in "BINGO": 
+        charL = lists[char]
         bingo = True
-        for i in range(len(char)):
-            if "x" in char[i]:
-                for y in range(len(char[i])):
-                    if char[i][y] != "x":
-                        print("here")
+        for i in range(len(charL)):
+            if "x" in charL[i]:
+                for y in range(len(charL[i])):
+                    if charL[i][y] != "x":
                         bingo = False
             else:
-                print(char[i])
                 bingo = False
             if bingo:
                 print("BINGO")
+                print("B  I  N  G  O")
+                print(f"{B[i][0]}{I[i][0]}{N[i][0]}{G[i][0]}{O[i][0]}")
+                print(f"{B[i][1]}{I[i][1]}{N[i][1]}{G[i][1]}{O[i][1]}")
+                print(f"{B[i][2]}{I[i][2]}{N[i][2]}{G[i][2]}{O[i][2]}")
+                print(f"{B[i][3]}{I[i][3]}{N[i][3]}{G[i][3]}{O[i][3]}")
+                print(f"{B[i][4]}{I[i][4]}{N[i][4]}{G[i][4]}{O[i][4]}")
 
 
 main() #Starts the program
