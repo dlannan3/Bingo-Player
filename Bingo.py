@@ -1,3 +1,4 @@
+import os
 #Initialize global variables for each letter in BINGO
 B = []
 I = []
@@ -12,15 +13,22 @@ lists = {
     "O" : O
 }
 
+def clear(): #Clears the console when called
+    os.system('cls' if os.name == 'nt' else 'clear')
+
 def main(): #Main function of the program that asks for the number called and identifies the column based on the number range
     global B, I, N, G, O
+    #Clears each list when the program is started
     B.clear()
     I.clear()
     N.clear()
     G.clear()
     O.clear()
     defineCards()
+    clear() #Clears the console before asking for the first number
     card = input("What number was called?\n")
+    clear() #Clears the console after asking for number called
+    print(card) #Reprints the last call while keeping the variable defined to create a pause
     while(card != "quit" and card != "new"): #Loops the function until the user enters "quit" or "new"
         card = int(card)
         if(card <= 15):
@@ -33,9 +41,12 @@ def main(): #Main function of the program that asks for the number called and id
             print(scanG(str(card)))
         else:
             print(scanO(str(card)))
-        bingoV()
-        bingoD()
+        bingoV() #Checks for vertical bingos
+        bingoH() #Checks for horizontal bingos
+        bingoD() #Checks for diagonal bingos
         card = input("What number was called?\n")
+        clear() #Clears the console after asking for number called
+        print(card) #Reprints the last call while keeping the variable defined to create a pause
     if(card == "new"): #Restarts the program
 
         main()
@@ -55,6 +66,7 @@ def defineCards(): #Defines each list for the cards and their columns
         print(f"Please enter the O values for card {i + 1}")
         O.append([input() for _ in range(5)]) #Appends a list as a value in the list O
         N[i].insert(2,"x") #Creates the free space on each card before moving to the next
+
 
 def scanB(call): #Each functions checks if the number entered is on any of the cards by checking the column identified in main()
     global B
@@ -129,6 +141,13 @@ def bingoD(): #Checks for a bingo on the diagonals
         elif(B[i][4] == "x" and I[i][3] =="x" and G[i][1] == "x" and O[i][0] == "x"): #Check for diagonal from bottom left to top right
             callBingo(i)
 
+def bingoH(): #Checks for a bingo on the horizontals
+    for i in range(len(B)): #Loops through each card
+        if "x" in B[i]: #Checks to see if there are any x's in column B since there must be atleast one to have a horizontal
+            for x in range(len(B[i])): #Loops through each index of each card
+                if (B[i][x] == "x" and I[i][x] == "x" and N[i][x] == "x" and G[i][x] == "x" and O[i][x] == "x"):
+                    callBingo(i) #Calls bingo if any horizontals are found
+
 
 def callBingo(i): #Prints the card number and layout for the user to dab them
     print(f"BINGO on card {i+1}\n") #Displays the card number and creates a blank line below
@@ -140,5 +159,5 @@ def callBingo(i): #Prints the card number and layout for the user to dab them
     print(f"{B[i][3]} {I[i][3]} {N[i][3]} {G[i][3]} {O[i][3]}")
     print(f"{B[i][4]} {I[i][4]} {N[i][4]} {G[i][4]} {O[i][4]}\n") #Creates a blank space below the card
 
-
-main() #Starts the program
+if __name__ == "__main__":
+    main() #Starts the program
