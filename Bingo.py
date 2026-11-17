@@ -1,11 +1,17 @@
 import os
 import random as r
+import copy
 #Initialize global variables for each letter in BINGO
 B = []
 I = []
 N = []
 G = []
 O = []
+A1 = []
+A2 = []
+A3 = []
+A4 = []
+A5 = []
 lists = {
     "B" : B,
     "I" : I,
@@ -20,7 +26,7 @@ def clear(): #Clears the console when called
 
 
 def main(): #Main function of the program that asks for the number called and identifies the column based on the number range
-    global B, I, N, G, O
+    global B,I,N,G,O, lists
     nums = 0
     #Clears each list when the program is started
     clear() #Clears the console before asking for the first number
@@ -54,15 +60,33 @@ def main(): #Main function of the program that asks for the number called and id
             bingoV() #Checks for vertical bingos
             bingoD() #Checks for diagonal bingos
             bingoH() #Checks for horizontal bingos
+        print(A1)
         card = input("What number was called?\n")
         clear() #Clears the console after asking for number called
         print(card) #Reprints the last call while keeping the variable defined to create a pause
-    if(card == "new"): #Restarts the program
-        main()
+        if(card == "new"): #Restarts the program
+            card = "0"
+            B.clear()
+            B = copy.deepcopy(A1)
+            I.clear()
+            I = copy.deepcopy(A2)
+            N.clear()
+            N = copy.deepcopy(A3)
+            G.clear()
+            G = copy.deepcopy(A4)
+            O.clear()
+            O = copy.deepcopy(A5)
+            lists = {
+                "B" : B,
+                "I" : I,
+                "N" : N,
+                "G" : G,
+                "O" : O
+            }
 
 
 def defineCards(): #Defines each list for the cards and their columns
-    global B,I,N,G,O
+    global B,I,N,G,O, A1, A2, A3, A4, A5
     loops = input("How many cards do you have?\n") #Asks the user how many cards they are going to use and turns it to an integer
     clear()
     if "test" in loops:
@@ -102,6 +126,12 @@ def defineCards(): #Defines each list for the cards and their columns
             O.append([input() for _ in range(5)]) #Appends a list as a value in the list O
             clear()
             N[i].insert(2,"x") #Creates the free space on each card before moving to the next
+    A1 = copy.deepcopy(B)
+    A2 = copy.deepcopy(I)
+    A3 = copy.deepcopy(N)
+    A4 = copy.deepcopy(G)
+    A5 = copy.deepcopy(O)
+
 
 def scanB(call): #Each functions checks if the number entered is on any of the cards by checking the column identified in main()
     global B
@@ -166,8 +196,8 @@ def scanO(call):
 def bingoV(): #Check for a bingo in each column
     for char in "BINGO": #Cycles through each column
         charL = lists[char] #Converts letters as a string to the list names
-        bingo = True #Starts bingo as true until proven false
         for i in range(len(charL)): #Loops through each card
+            bingo = True #Starts bingo as true until proven false
             if "x" in charL[i]: #Checks if there are an x's at all and breaks if none have been dabbed
                 for y in range(len(charL[i])): #Loops through each index of the column
                     if charL[i][y] != "x": #Checks if any numbers in the column aren't dabbed
